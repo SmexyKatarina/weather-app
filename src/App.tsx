@@ -3,6 +3,7 @@ import './App.css';
 
 import { BerlinWeather } from './data/MockData';
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 //import { fetchWeatherApi } from 'openmeteo';
 import WeatherStatistics from './components/WeatherStatistics';
@@ -45,6 +46,7 @@ function App() {
 		<div className="App" >
 			<Header location={location} setLocation={setLocation} getWeatherInformation={getWeatherInformation}/>
 			<WeatherStatistics weatherStats={weatherInformation}/>
+			<Footer />
 		</div>
 	);
 }
