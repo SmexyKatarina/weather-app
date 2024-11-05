@@ -1,0 +1,33 @@
+#header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 5px;
+    border-bottom: 1px solid rgb(30, 30, 30);
+}
+
+#location-inputs * {
+    margin-right: 5px;
+}
+
+.location-input {
+    background-color: rgb(30, 30, 30);
+    color: white;
+    border: 1px rgb(50, 50, 50) solid;
+    padding: 5px;
+    font-size: 15px;
+}
+
+.location-input:focus {
+    outline: none !important;
+    border: 1px dotted white;
+}
+
+#get-weather {
+    font-size: 15px;
+    height: 30px;
+    background-color: rgb(30, 30, 30);
+    color: lightgray;
+    border: 2px dashed rgb(100, 100, 100);
+    padding: 5px;
+}
