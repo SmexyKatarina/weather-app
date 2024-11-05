@@ -4,11 +4,11 @@ A simple app that can be used to search specific coordinates (latitude and longi
 
 ## How does it work?
 
-It uses an API from [open-meteo.com](OpenMeteo), which is a free-to-use weather data collection API. It has a bunch of historical data dating back 80 years to the present and has a very wide range of differnet data types to choose from. 
+It uses an API from [OpenMeteo](open-meteo.com), which is a free-to-use weather data collection API. It has a bunch of historical data dating back 80 years to the present and has a very wide range of differnet data types to choose from. 
 
 It uses the Latitude and Longitude coordinates given and data is requested from their API. If it so happens that there is no possible way to fetch (there is a limited API requests daily), there will be already stored data (not up to date, just for ease of use and make sure that it can still function regardless).
 
-You can check out their website and documentation here: [https://open-meteo.com/en/docs]("OpenMeteo Documentation")
+You can check out their website and documentation here: [OpenMeteo Documentation](https://open-meteo.com/en/docs)
 
 ## How to run
 
