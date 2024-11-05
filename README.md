@@ -12,4 +12,10 @@ You can check out their website and documentation here: [OpenMeteo Documentation
 
 ## How to run
 
-You can see a preview of this by downloading it and running "npm start" in the default directory
+You can download the source code and run it in a terminal:
+
+1. Download the source code into a file
+2. Open up a terminal and navigate to the directory containing all the files.
+3. Install all dependencies (`npm install`)
+4. After it is finished installing, run `npm start`
+5. A new tab will be opened containing the website! Enjoy! 
