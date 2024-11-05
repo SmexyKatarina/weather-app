@@ -1,46 +1,15 @@
-# Getting Started with Create React App
+# Welcome to the Weather App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple app that can be used to search specific coordinates (latitude and longitude) to see the current weather (present and near future). All that is needed is to enter a set of coordinates into the 'Latitude' and 'Longitude' input boxes and hit 'Get My Weather'. It will list certain information about the location currently, within a few hours and days.
 
-## Available Scripts
+## How does it work?
 
-In the project directory, you can run:
+It uses an API from [open-meteo.com](OpenMeteo), which is a free-to-use weather data collection API. It has a bunch of historical data dating back 80 years to the present and has a very wide range of differnet data types to choose from. 
 
-### `npm start`
+It uses the Latitude and Longitude coordinates given and data is requested from their API. If it so happens that there is no possible way to fetch (there is a limited API requests daily), there will be already stored data (not up to date, just for ease of use and make sure that it can still function regardless).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+You can check out their website and documentation here: [https://open-meteo.com/en/docs](OpenMeteo Documentation)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## How to run
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+You can see a preview of this by downloading it and running "npm start" in the default directory
