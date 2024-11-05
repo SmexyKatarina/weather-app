@@ -8,7 +8,7 @@ It uses an API from [open-meteo.com](OpenMeteo), which is a free-to-use weather 
 
 It uses the Latitude and Longitude coordinates given and data is requested from their API. If it so happens that there is no possible way to fetch (there is a limited API requests daily), there will be already stored data (not up to date, just for ease of use and make sure that it can still function regardless).
 
-You can check out their website and documentation here: [https://open-meteo.com/en/docs](OpenMeteo Documentation)
+You can check out their website and documentation here: [https://open-meteo.com/en/docs]("OpenMeteo Documentation")
 
 ## How to run
 
