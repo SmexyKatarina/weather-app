@@ -1,3 +1,13 @@
+/*
+    This is mock data and replacement data incase for an increase of API calls. This contains the major cities across the world
+    and their relative data at a specific date/time. 
+
+    THIS DATA MAY OR MAY NOT BE UP TO DATE. THIS IS PURELY TO ENSURE THE CORRECT FUNCTIONALITY OF THE APP AT ALL TIMES AND FOR ANY TESTING
+    OF THE WEBSITE.
+
+    
+*/
+
 export const BerlinWeather = {
     "latitude": 52.52,
     "longitude": 13.419998,
