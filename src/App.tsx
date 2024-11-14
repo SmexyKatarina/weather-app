@@ -5,7 +5,7 @@ import { BerlinWeather } from './data/MockData';
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
-//import { fetchWeatherApi } from 'openmeteo';
+// import { fetchWeatherApi } from 'openmeteo';
 import WeatherStatistics from './components/WeatherStatistics';
 
 function App() {
@@ -22,13 +22,14 @@ function App() {
 		const BASE_URL = "https://api.open-meteo.com/v1/forecast?";
 
 		const QUERY = {
-			"latitude": location.lat,
-			"longitude": location.long,
-			"current": ["temperature_2m", "apparent_temperature", "wind_speed_10m"],
-			"hourly": ["temperature_2m", "apparent_temperature", "wind_speed_10m"],
-			"timezone": auto,
+			"latitude": 52.52,
+			"longitude": 13.41,
+			"current": ["temperature_2m", "apparent_temperature", "precipitation", "rain", "showers", "snowfall", "wind_speed_10m"],
+			"hourly": ["temperature_2m", "apparent_temperature", "precipitation_probability", "precipitation", "cloud_cover", "wind_speed_10m"],
+			"daily": ["sunrise", "sunset"],
+			"timezone": "auto",
 			"temporal_resolution": "hourly_3"
-		}
+		};
 
 		const res = await fetchWeatherApi(BASE_URL, QUERY);
 		const response = res[0];
