@@ -14,7 +14,7 @@
 
 .footer-link {
     float: left;
-    color: gray;
-    text-decoration: none;
+    color: rgb(70, 70, 70);
+    font-size: 15px;
     margin: 10px;
 }
