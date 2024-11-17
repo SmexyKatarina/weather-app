@@ -28,7 +28,13 @@
 
 .hourly-weather {
     display: flex;
+    flex-direction: column;
     width: 80%;
+}
+
+#hourly-container {
+    display: flex;
+    width: 100%;
     flex-wrap: wrap;
 }
 
@@ -38,4 +44,9 @@
     width: 10%;
     padding: 10px;
     font-size: 20px;
+}
+
+.disclaimer {
+    font-size: 10px;
+    color: rgb(20, 40, 20);
 }
