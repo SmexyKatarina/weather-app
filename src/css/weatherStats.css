@@ -5,7 +5,7 @@
     justify-items: center;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .location {
@@ -19,6 +19,38 @@
 #weather-statistics * {
     margin: 10px auto 10px auto;
 }
+
+#day-chooser {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.day-button-active {
+    border: 1px dashed rgb(50, 120, 50);
+    color: darkgreen;
+}
+
+#day-chooser * {
+    margin: 5px;
+    padding: 5px;
+    background-color: transparent;
+    font-size: 16px;
+    
+}
+
+.day-button {
+    border: 1px dashed rgb(50, 50, 50);
+    background-color: transparent;
+    color: gray;
+}
+
+#day-chooser .day-button:hover {
+    cursor: pointer;
+    color: white;
+}
+
+
 
 .current-weather {
     border: 1px solid white;
@@ -47,6 +79,6 @@
 }
 
 .disclaimer {
-    font-size: 10px;
-    color: rgb(20, 40, 20);
+    font-size: 12px;
+    color: rgb(60, 60, 60);
 }

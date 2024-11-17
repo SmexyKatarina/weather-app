@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import '../css/weatherStats.css';
 
@@ -57,29 +57,52 @@ const WeatherStatistics = (
         }
     ) => {
 
-    const { latitude, longitude, timezone, timezone_abbreviation, elevation, current, hourly } = props.weatherStats;
+    const { latitude, longitude, timezone, timezone_abbreviation, elevation, current_units, current, hourly_units, hourly, daily_units, daily } = props.weatherStats;
 
-    const currentWeather = { ...current };
-    const hourlyWeather = { ...hourly };
+    const currentWeather = { ...current, units: { ...current_units } };
+    const hourlyWeather = { ...hourly, units: { ...hourly_units } };
+    const dailyWeather = { ...daily, units: { ...daily_units } };
 
     const generateHourly = () => {
 
         let hourlyElements = [];
 
+        let hourArray = [];
+        
         for (let i = 0; i < hourlyWeather.time.length; i++) 
         {
             let {time, temp, apparent, wind} = { time: hourlyWeather.time[i], temp: hourlyWeather.temperature_2m[i], apparent: hourlyWeather.apparent_temperature[i], wind: hourlyWeather.wind_speed_10m[i] };
-            hourlyElements.push((
+            hourArray.push((
                 <div className="hour-tile" key={i}>
                     <div className="hour-time">{time.split("T").join(" ")}</div>
                     <div className="hour-temp">Temp: {Math.round(temp)}°C<br/>(Feels Like: {Math.round(apparent)}°C)</div>
                     <div className="hour-wind">Wind Speed: {Math.round(wind)}Km/h</div>
                 </div>
             ));
-            
+            if (hourArray.length === 8) {
+                hourlyElements.push(hourArray);
+                hourArray = [];
+            } 
         }
         return hourlyElements;
     }
+
+    const generateDayArray = () => {
+        let dayArray = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        let spliced = [ ...dayArray.splice(new Date().getDay()), ...dayArray];
+        return [ "Today", "Tomorrow", ...spliced.splice(2)];
+    }
+
+    const onChangeDay = (target: EventTarget & HTMLButtonElement) => {
+        let element = document.querySelector(`button[value="${currentDay}"]`);
+        if (element) element.className = "day-button";
+        setCurrentDay(parseInt(target.value));
+        target.className = "day-button-active";
+    }
+
+    const dayArray = generateDayArray();
+    const hourlyArray = generateHourly();
+    const [currentDay, setCurrentDay] = useState(0);
 
     return (
         <div id="weather-statistics" style={{ display: "none" }}>
@@ -90,11 +113,16 @@ const WeatherStatistics = (
                 <div className="current-temp">Temp: {Math.round(currentWeather.temperature_2m)}°C (Feels like: {Math.round(currentWeather.apparent_temperature)}°C)</div>
                 <div className="current-wind">Wind Speed: {Math.round(currentWeather.wind_speed_10m)}Km/h</div>
             </div>
-            <div className="day-chooser">
+            <div id="day-chooser">
+                {dayArray.map((x, i) => {
+                    return (
+                        <button className={"day-button" + (i === 0 ? "-active" : "")} key={i} value={i} onClick={(e) => { onChangeDay(e.currentTarget); }}>{x}</button>
+                    );
+                })}
             </div>
             <div className="hourly-weather">
                 <div id="hourly-container">
-                    {generateHourly().map(x => { return x; })}
+                    {hourlyArray[currentDay].map(x => { return x; })}
                 </div>
                 <p className="disclaimer">Note: This is every 3 hours not every hour.</p>
             </div>

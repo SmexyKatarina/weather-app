@@ -99,7 +99,7 @@ function App() {
 	}
 
 	return (
-		<div className="App" >
+		<div className="App">
 			<Header location={location} setLocation={setLocation} getWeatherInformation={getWeatherInformation}/>
 			<WeatherStatistics weatherStats={weatherInformation}/>
 			<Footer />
