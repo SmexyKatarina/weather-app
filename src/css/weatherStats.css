@@ -1,11 +1,10 @@
 #weather-statistics {
     display: flex;
     flex-direction: column;
-    align-content: center;
     justify-items: center;
     align-items: center;
     justify-content: center;
-    margin-bottom: 25px;
+    margin-bottom: 5%;
     margin-left: auto;
     width: 80%;
 }
@@ -18,8 +17,12 @@
     font-size: 24px;
 }
 
-#weather-statistics * {
+#weather-statistics > * {
     margin: 10px auto 10px auto;
+}
+
+#weather-statistics .hour-tile {
+    margin: 0;
 }
 
 #day-chooser {
@@ -52,38 +55,48 @@
     color: white;
 }
 
-
-
 .current-weather {
     border: 1px solid gray;
     width: 30%;
     font-size: 20px;
 }
 
+.current-weather * {
+    margin: 10px;
+}
+
 .hourly-weather {
     display: flex;
     flex-direction: column;
+    justify-items: center;
     width: 80%;
+    height: 100%;
 }
 
 #hourly-container {
     display: flex;
-    width: 100%;
-    flex-wrap: wrap;
+    width: 90%;
+    flex-flow: row wrap;
+    margin: 0 auto 15px auto;
+    height: 400px;
 }
 
 .hour-tile {
     background-color: transparent;
     color: gray;
     border: 1px solid gray;
-    width: 20%;
     padding: 10px;
     font-size: 20px;
+    flex: 1 1 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 .daily-weather {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     width: 50%;
 }
 
