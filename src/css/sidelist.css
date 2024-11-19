@@ -1,0 +1,35 @@
+.sidelist-container {
+    width: 25%;
+    margin: 10px 0 0 15px;
+}
+
+.sidelist-title {
+    text-align: left;
+    clear: right;
+}
+
+
+
+.sidelist-item {
+    width: 80%;
+    text-align: left;
+    margin-left: 20px;
+}
+
+.sidelist-text {
+    text-decoration: underline;
+    display: inline;
+}
+
+.sidelist-item:before {
+    content: '-> ';
+}
+
+.sidelist-item:hover {
+    cursor: pointer;
+    color: white;
+}
+
+.sidelist-item:hover .sidelist-text {
+    text-decoration: none;
+}

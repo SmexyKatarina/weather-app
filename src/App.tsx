@@ -3,6 +3,8 @@ import './App.css';
 
 import { BerlinWeather } from './data/MockData';
 import Header from "./components/Header";
+import SideList from './components/SideList';
+import SideListItem from './components/SideListItem';
 import Footer from "./components/Footer";
 
 // import { fetchWeatherApi } from 'openmeteo';
@@ -11,6 +13,8 @@ import WeatherStatistics from './components/WeatherStatistics';
 function App() {
 
 	const [location, setLocation] = useState({ lat: 0, long: 0 });
+
+	const [previousLocations, setPreviousLocations] = useState([{ lat: 0, long: 0 }]);
 
 	const [weatherInformation, setWeatherInformation] = useState({ 
 		"latitude": 0, 
@@ -94,6 +98,9 @@ function App() {
 		*/
 
 		setWeatherInformation(BerlinWeather);
+
+		setPreviousLocations((prev: { lat: number, long: number }[]) => [{ lat: weatherInformation.latitude, long: weatherInformation.longitude }, ...prev])
+
 		const el = document.getElementById("weather-statistics");
 		if (el) el.style.display = "block";
 	}
@@ -101,6 +108,13 @@ function App() {
 	return (
 		<div className="App">
 			<Header location={location} setLocation={setLocation} getWeatherInformation={getWeatherInformation}/>
+			<SideList name="Previous Locations">
+				{previousLocations.map(x => {
+					return (
+						<SideListItem text={x.lat + ", " + x.long}/>
+					);
+				})}
+			</SideList>
 			<WeatherStatistics weatherStats={weatherInformation}/>
 			<Footer />
 		</div>
