@@ -2,7 +2,7 @@ import React from "react";
 
 import '../css/sidelist.css';
 
-const SideList = (props: any) => {
+const SideList = (props: { children: React.ReactNode[], name: string}) => {
 
     const { children, name} = props;
 

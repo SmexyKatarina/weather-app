@@ -2,9 +2,9 @@ import React from "react";
 
 import '../css/header.css';
 
-const Header = (props: { location: { lat: number, long: number }, setLocation: React.Dispatch<React.SetStateAction<{ lat: number, long: number }>>, getWeatherInformation: () => void}) => {
+const Header = (props: { location: { lat: number, long: number }, setLocation: React.Dispatch<React.SetStateAction<{ lat: number, long: number }>>, getWeatherInformation: () => void, addPreviousLocation: (location: { lat: number, long: number }) => void}) => {
 
-    const { location, setLocation, getWeatherInformation } = props;
+    const { location, setLocation, getWeatherInformation, addPreviousLocation } = props;
 
     return (
         <div id="header" data-testid="header-component">
@@ -14,7 +14,7 @@ const Header = (props: { location: { lat: number, long: number }, setLocation: R
                 <input name="Latitude" className="location-input" id="Latitude"  value={location.lat} onChange={({target}) => setLocation({...location, lat: Number(target.value)})}></input>
                 <label htmlFor="Longitude" aria-label="Longitude" className="location-label">Longitude</label>
                 <input name="Longitude" className="location-input" id="Longitude"  value={location.long} onChange={({target}) => setLocation({...location, long: Number(target.value)})}></input>
-                <button name="Search" id="get-weather" data-testid="submit-weather" onClick={() => { getWeatherInformation(); }}>Get My Weather</button>
+                <button name="Search" id="get-weather" data-testid="submit-weather" onClick={() => { addPreviousLocation({lat: location.lat, long: location.long}); getWeatherInformation(); }}>Get My Weather</button>
             </div>
         </div>
     );

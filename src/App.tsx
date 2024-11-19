@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
 import { BerlinWeather } from './data/MockData';
@@ -16,7 +16,7 @@ function App() {
 
 	const [previousLocations, setPreviousLocations] = useState([{ lat: 0, long: 0 }]);
 
-	const [weatherInformation, setWeatherInformation] = useState({ 
+	const [weatherInformation, setWeatherInformation] = useState({ 	
 		"latitude": 0, 
 		"longitude": 0, 
 		"timezone": "GMT", 
@@ -73,6 +73,22 @@ function App() {
 		}
 	});
 
+	useEffect(() => {
+		setPreviousLocations([]);
+	}, []);
+
+	const addPreviousLocation = (location: { lat: number, long: number }) => {
+		for (let i = 0; i < previousLocations.length; i++) {
+			if (previousLocations[i].lat === location.lat && previousLocations[i].long === location.long) return;
+		}
+		
+		setPreviousLocations((prev) => [location, ...prev]);
+
+		if (previousLocations.length >= 5) {
+			setPreviousLocations((prev) => prev.filter((_, i) => i !== 5));
+		}
+	}
+
 	const getWeatherInformation = () => {
 
 		// SEND API CALL HERE AND CHANGE METHOD TO ASYNC
@@ -99,19 +115,17 @@ function App() {
 
 		setWeatherInformation(BerlinWeather);
 
-		setPreviousLocations((prev: { lat: number, long: number }[]) => [{ lat: weatherInformation.latitude, long: weatherInformation.longitude }, ...prev])
-
 		const el = document.getElementById("weather-statistics");
 		if (el) el.style.display = "block";
 	}
 
 	return (
 		<div className="App">
-			<Header location={location} setLocation={setLocation} getWeatherInformation={getWeatherInformation}/>
+			<Header location={location} setLocation={setLocation} getWeatherInformation={getWeatherInformation} addPreviousLocation={addPreviousLocation}/>
 			<SideList name="Previous Locations">
 				{previousLocations.map(x => {
 					return (
-						<SideListItem text={x.lat + ", " + x.long}/>
+						<SideListItem text={x.lat + ", " + x.long} />
 					);
 				})}
 			</SideList>
