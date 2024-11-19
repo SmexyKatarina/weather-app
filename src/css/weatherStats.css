@@ -53,7 +53,7 @@
 
 
 .current-weather {
-    border: 1px solid white;
+    border: 1px solid gray;
     width: 20%;
     font-size: 20px;
 }
@@ -71,14 +71,31 @@
 }
 
 .hour-tile {
-    background-color: gray;
-    color: black;
-    width: 10%;
+    background-color: transparent;
+    color: gray;
+    border: 1px solid gray;
+    width: 20%;
     padding: 10px;
     font-size: 20px;
+}
+
+.daily-weather {
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+}
+
+.daily-weather * {
+    margin: 0px;
+    padding: 5px;
 }
 
 .disclaimer {
     font-size: 12px;
     color: rgb(60, 60, 60);
+}
+
+.separator {
+    border-top: 1.5px solid gray;
+    width: 80%;
 }

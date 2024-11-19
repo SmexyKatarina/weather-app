@@ -63,6 +63,14 @@ const WeatherStatistics = (
     const hourlyWeather = { ...hourly, units: { ...hourly_units } };
     const dailyWeather = { ...daily, units: { ...daily_units } };
 
+    const formatTo12Hour = (time: string) => {
+        let split = time.split(":").map(x => parseInt(x));
+        const afternoon = split[0] >= 12;
+        if (split[0] === 0) split[0] = 12;
+        else if (split[0] > 12) split[0] -= 12;
+        return split[0] + ":" + (split[1] ? split[1] : "00") + (afternoon ? "PM" : "AM");
+    }
+
     const generateHourly = () => {
 
         let hourlyElements = [];
@@ -74,9 +82,9 @@ const WeatherStatistics = (
             let {time, temp, apparent, wind} = { time: hourlyWeather.time[i], temp: hourlyWeather.temperature_2m[i], apparent: hourlyWeather.apparent_temperature[i], wind: hourlyWeather.wind_speed_10m[i] };
             hourArray.push((
                 <div className="hour-tile" key={i}>
-                    <div className="hour-time">{time.split("T").join(" ")}</div>
-                    <div className="hour-temp">Temp: {Math.round(temp)}°C<br/>(Feels Like: {Math.round(apparent)}°C)</div>
-                    <div className="hour-wind">Wind Speed: {Math.round(wind)}Km/h</div>
+                    <div className="hour-time">{formatTo12Hour(time.split("T")[1])}</div>
+                    <div className="hour-temp">Temp: {Math.round(temp)}{hourlyWeather.units.temperature_2m}<br/>(Feels Like: {Math.round(apparent)}{hourlyWeather.units.temperature_2m})</div>
+                    <div className="hour-wind">Wind Speed: {Math.round(wind)} {hourlyWeather.units.wind_speed_10m}</div>
                 </div>
             ));
             if (hourArray.length === 8) {
@@ -84,6 +92,7 @@ const WeatherStatistics = (
                 hourArray = [];
             } 
         }
+        if (hourArray.length < 8) hourlyElements.push(hourArray);
         return hourlyElements;
     }
 
@@ -113,6 +122,11 @@ const WeatherStatistics = (
                 <div className="current-temp">Temp: {Math.round(currentWeather.temperature_2m)}°C (Feels like: {Math.round(currentWeather.apparent_temperature)}°C)</div>
                 <div className="current-wind">Wind Speed: {Math.round(currentWeather.wind_speed_10m)}Km/h</div>
             </div>
+            <div className="daily-weather">
+                <div>Sunrise: {formatTo12Hour(dailyWeather.sunrise[currentDay].split("T")[1])}</div>
+                <div>Sunset: {formatTo12Hour(dailyWeather.sunset[currentDay].split("T")[1])}</div>
+            </div>
+            <div className="separator"></div>
             <div id="day-chooser">
                 {dayArray.map((x, i) => {
                     return (
