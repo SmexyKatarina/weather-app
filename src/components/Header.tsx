@@ -29,7 +29,13 @@ const Header = (props: { location: { lat: number, long: number }, setLocation: R
                 <input name="Latitude" className="location-input" id="Latitude"  value={location.lat} onChange={({target}) => setLocation({...location, lat: parseFloat(target.value ? target.value : "0")})}></input>
                 <label htmlFor="Longitude" aria-label="Longitude" className="location-label">Longitude</label>
                 <input name="Longitude" className="location-input" id="Longitude"  value={location.long} onChange={({target}) => setLocation({...location, long: parseFloat(target.value ? target.value : "0")})}></input>
-                <button name="Search" id="get-weather" data-testid="submit-weather" onClick={() => { addPreviousLocation({lat: location.lat, long: location.long}); getWeatherInformation(); }}>Get My Weather</button>
+                <button name="Search" id="get-weather" onClick={() => { addPreviousLocation({lat: location.lat, long: location.long}); getWeatherInformation(); }}>Get My Weather</button>
+                <button name="Geoloc" id="get-geoloc" onClick={() => { 
+                    navigator.geolocation.getCurrentPosition((pos) => {
+                        const { latitude, longitude } = pos.coords;
+                        setLocation({ lat: latitude, long: longitude });
+                    }, () => { alert("Cannot get location."); return;});
+                 }}>Curr. Loc.</button>
             </div>
         </div>
     );
