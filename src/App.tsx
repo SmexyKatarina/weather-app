@@ -123,9 +123,9 @@ function App() {
 		<div className="App">
 			<Header location={location} setLocation={setLocation} getWeatherInformation={getWeatherInformation} addPreviousLocation={addPreviousLocation}/>
 			<SideList name="Previous Locations">
-				{previousLocations.map(x => {
+				{previousLocations.map((x, i) => {
 					return (
-						<SideListItem text={x.lat + ", " + x.long} />
+						<SideListItem text={x.lat + ", " + x.long} key={i}/>
 					);
 				})}
 			</SideList>

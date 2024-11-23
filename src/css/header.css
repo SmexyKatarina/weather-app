@@ -10,6 +10,27 @@
     margin-right: 5px;
 }
 
+#location-inputs {
+    display: flex;
+    flex-direction: row;
+}
+
+#Location-chooser {
+    background-color: rgb(30, 30, 30);
+    color: white;
+    padding: 5px;
+    border: 1px rgb(50, 50, 50) solid;
+}
+
+#Location-chooser option[disabled]:first-child {
+    display: none;
+}
+
+#Location-chooser:focus {
+    outline: none !important;
+    border: 1px dotted white;
+}
+
 .location-input {
     background-color: rgb(30, 30, 30);
     color: white;

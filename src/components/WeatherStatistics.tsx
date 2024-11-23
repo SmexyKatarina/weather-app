@@ -68,7 +68,7 @@ const WeatherStatistics = (
         const afternoon = split[0] >= 12;
         if (split[0] === 0) split[0] = 12;
         else if (split[0] > 12) split[0] -= 12;
-        return split[0] + ":" + (split[1] ? split[1] : "00") + (afternoon ? "PM" : "AM");
+        return split[0] + ":" + (split[1] ? split[1] < 10 ? "0" + split[1] : split[1] : "00") + (afternoon ? "PM" : "AM");
     }
 
     const generateHourly = () => {
@@ -115,7 +115,7 @@ const WeatherStatistics = (
 
     return (
         <div id="weather-statistics" style={{ display: "none" }}>
-            <div className="location">Location: {latitude}°N {longitude}°E with an elevation of {elevation}m {(elevation < 0) ? "below" : "above"}</div>
+            <div className="location">Location: {latitude}°N {longitude}°E with an elevation of {elevation}m {(elevation < 0) ? "below" : "above"} sea level</div>
             <div className="timezone">Data generated at: {currentWeather.time.split("T").join(" ") + " " + timezone_abbreviation} ({timezone})</div>
             <div className="current-weather">
                 <div>Current Weather</div>

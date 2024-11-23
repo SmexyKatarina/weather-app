@@ -142,3 +142,6 @@ export const BerlinWeather = {
         ]
     }
 }
+
+
+export const WeatherVariables = [BerlinWeather];
