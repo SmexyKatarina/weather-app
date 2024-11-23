@@ -79,12 +79,22 @@ const WeatherStatistics = (
         
         for (let i = 0; i < hourlyWeather.time.length; i++) 
         {
-            let {time, temp, apparent, wind} = { time: hourlyWeather.time[i], temp: hourlyWeather.temperature_2m[i], apparent: hourlyWeather.apparent_temperature[i], wind: hourlyWeather.wind_speed_10m[i] };
+            let {time, temp, apparent, wind, precip, precip_prob, cloud_coverage } = { 
+                time: hourlyWeather.time[i], 
+                temp: hourlyWeather.temperature_2m[i], 
+                apparent: hourlyWeather.apparent_temperature[i], 
+                wind: hourlyWeather.wind_speed_10m[i],
+                precip_prob: hourlyWeather.precipitation_probability[i],
+                precip: hourlyWeather.precipitation[i],
+                cloud_coverage: hourlyWeather.cloud_cover[i],
+            };
             hourArray.push((
                 <div className="hour-tile" key={i}>
                     <div className="hour-time">{formatTo12Hour(time.split("T")[1])}</div>
                     <div className="hour-temp">Temp: {Math.round(temp)}{hourlyWeather.units.temperature_2m}<br/>(Feels Like: {Math.round(apparent)}{hourlyWeather.units.temperature_2m})</div>
-                    <div className="hour-wind">Wind Speed: {Math.round(wind)} {hourlyWeather.units.wind_speed_10m}</div>
+                    <div className="hour-wind">Wind Speed:<br/>{Math.round(wind)} {hourlyWeather.units.wind_speed_10m}</div>
+                    <div className="hour-precip">Precip:<br/>{precip_prob}{hourlyWeather.units.precipitation_probability} of {precip}{hourlyWeather.units.precipitation}</div>
+                    <div className="hour-clouds">Cloud Coverage:<br/>{cloud_coverage}{hourlyWeather.units.cloud_cover}</div>
                 </div>
             ));
             if (hourArray.length === 8) {
