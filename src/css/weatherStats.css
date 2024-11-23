@@ -35,6 +35,7 @@
 .day-button-active {
     border: 1px solid rgb(50, 120, 50);
     color: darkgreen;
+    transition: 0.5s all;
 }
 
 #day-chooser * {
@@ -49,6 +50,7 @@
     border: 1px dashed rgb(50, 50, 50);
     background-color: transparent;
     color: gray;
+    transition: all 0.25s;
 }
 
 #day-chooser .day-button:hover {
