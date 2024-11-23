@@ -125,7 +125,9 @@ function App() {
 			<SideList name="Previous Locations">
 				{previousLocations.map((x, i) => {
 					return (
-						<SideListItem text={x.lat + ", " + x.long} key={i}/>
+						<SideListItem text={x.lat + ", " + x.long} action={() => {
+							setLocation({lat: x.lat, long: x.long});
+						}} key={i}/>
 					);
 				})}
 			</SideList>
