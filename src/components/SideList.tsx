@@ -4,7 +4,7 @@ import '../css/sidelist.css';
 
 const SideList = (props: { children: React.ReactNode[], name: string}) => {
 
-    const { children, name} = props;
+    const { children, name } = props;
 
     return (
         <div className="sidelist-container">
