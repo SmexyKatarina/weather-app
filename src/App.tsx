@@ -316,12 +316,11 @@ function App() {
 
 			const LINK = BASE_URL + QUERY;
 
-			console.log(LINK);
-
 			const req = await fetch(LINK);
 			const response = await req.json();
 
-			console.log(response);
+			// TODO Add custom alert to show additional details of error.
+			// The api has a limit of requests per day so a error to describe that would be best.
 
 			if (response.reason) {
 				alert(response.reason);
