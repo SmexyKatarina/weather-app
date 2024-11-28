@@ -8,7 +8,10 @@
     
 */
 
+import { checkBounds } from "../App";
+
 export const BerlinWeather = {
+    "name": "Berlin",
     "latitude": 52.52,
     "longitude": 13.419998,
     "generationtime_ms": 0.265002250671387,
@@ -145,3 +148,19 @@ export const BerlinWeather = {
 
 
 export const WeatherVariables = [BerlinWeather];
+
+export const checkMockData = (location: { lat: number, long: number }) => {
+    const locations = WeatherVariables.map((x, i) => { return { lat: x.latitude, long: x.longitude, index: i }});
+
+    for (let i = 0; i < locations.length; i++) {
+        const check = locations[i];
+        const latCheck = checkBounds(location.lat, 2, check.lat);
+        const longCheck = checkBounds(location.long, 2, check.long);
+
+        if (latCheck && longCheck) {
+            return check.index;
+        }
+    }
+
+    return -1;
+}
