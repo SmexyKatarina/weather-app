@@ -125,7 +125,7 @@ const WeatherStatistics = (
 
     return (
         <div id="weather-statistics" style={{ display: "none" }}>
-            <div className="location">Location: {latitude}°N {longitude}°E with an elevation of {elevation}m {(elevation < 0) ? "below" : "above"} sea level</div>
+            <div className="location">Location: {latitude}°{latitude < 0 ? "S" : "N"} {longitude}°{longitude < 0 ? "W" : "E"} with an elevation of {elevation}m {(elevation < 0) ? "below" : "above"} sea level</div>
             <div className="timezone">Data generated at: {currentWeather.time.split("T").join(" ") + " " + timezone_abbreviation} ({timezone})</div>
             <div className="current-weather">
                 <div>Current Weather</div>
