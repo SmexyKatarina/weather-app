@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
-import { BerlinWeather } from './data/MockData';
+import { BerlinWeather, checkMockData, WeatherVariables } from './data/MockData';
 import Header from "./components/Header";
 import SideList from './components/SideList';
 import SideListItem from './components/SideListItem';
 import Footer from "./components/Footer";
 
-// import { fetchWeatherApi } from 'openmeteo';
 import WeatherStatistics from './components/WeatherStatistics';
 
-function App() {
+/**
+ * Uses bounds check to ensure that `base` is within a set range.
+ * @param {number} base The number that needs to be within bounds
+ * @param {number} lowBounds The low bounds of the number (meaning `compare - lowBounds <= base`)
+ * @param {number} [compare] Optional, The number that we're comparing to that will contain the bounds
+ * @param {number} [highBounds] Optional, The high bounds of the number (meaning `compare + highBounds <= base`)
+ * @returns {true|false} True, if the `base` is within bounds of `compare`, otherwise false if `base` is out of bounds.
+ */
+export const checkBounds = (base: number, lowBounds: number, compare?: number, highBounds?: number) => {
+	if (!highBounds) highBounds = lowBounds; if (!compare) compare = base;
+	return (Math.floor(compare - lowBounds) <= Math.floor(base) && Math.floor(base) <= Math.floor(compare + highBounds));
+}
 
+function App() {
+	
 	const [location, setLocation] = useState({ lat: 0, long: 0 });
 
 	const [previousLocations, setPreviousLocations] = useState([{ lat: 0, long: 0 }]);
@@ -132,6 +144,7 @@ function App() {
 
 	useEffect(() => {
 		setPreviousLocations([]);
+		setPreviousWeatherInformation([]);
 	}, []);
 
 	const addPreviousLocation = (location: { lat: number, long: number }) => {
@@ -218,8 +231,8 @@ function App() {
 
 		for (let i = 0; i < locations.length; i++) {
 			const check = locations[i];
-			const latBounds = check.lat - range >= Math.floor(location.lat) && Math.floor(location.lat) <= check.lat + range;
-			const longBounds = check.long - range >= Math.floor(location.long) && Math.floor(location.long) <= check.long + range; 
+			const latBounds = checkBounds(location.lat, check.lat, 2);
+			const longBounds = checkBounds(location.long, check.long, 2);
 			if (latBounds && longBounds) {
 				return previousWeatherInformation[check.index];
 			}
@@ -227,7 +240,7 @@ function App() {
 		return false;
 	}
 
-	const getWeatherInformation = () => {
+	const getWeatherInformation = async () => {
 
 		// SEND API CALL HERE AND CHANGE METHOD TO ASYNC
 		
@@ -280,35 +293,48 @@ function App() {
 				"sunrise": string[],
 				"sunset": string[]
 			}
-		}|false;
-		if (check = containsWeatherInfo(location, 2)) {
+		}|false = containsWeatherInfo(location, 2);
+		const mockCheck = checkMockData({...location});
+		if (check) {
 			setWeatherInformation(check);
 			addPreviousWeatherInformation(check);
+		} else if (mockCheck !== -1) {
+			const info = WeatherVariables[mockCheck];
+			setWeatherInformation(info);
+			addPreviousWeatherInformation(info);
 		} else {
-			/*
-
 			const BASE_URL = "https://api.open-meteo.com/v1/forecast?";
 
-			const QUERY = {
-				"latitude": 52.52,
-				"longitude": 13.41,
-				"current": ["temperature_2m", "apparent_temperature", "precipitation", "wind_speed_10m"],
-				"hourly": ["temperature_2m", "apparent_temperature", "precipitation_probability", "precipitation", "cloud_cover", "wind_speed_10m"],
-				"daily": ["sunrise", "sunset"],
-				"timezone": "auto",
-				"temporal_resolution": "hourly_3"
-			};
+			const QUERY = `
+			latitude=${location.lat}
+			&longitude=${location.long}
+			&current=temperature_2m,apparent_temperature,precipitation,wind_speed_10m
+			&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,cloud_cover,wind_speed_10m
+			&daily=sunrise,sunset
+			&timezone=auto
+			&temporal_resolution=hourly_3`;
 
-			const res = await fetchWeatherApi(BASE_URL, QUERY);
-			const response = res[0];
-			setWeatherInformation(response);
-			addPreviousWeatherInformation(response);
-			*/
+			const LINK = BASE_URL + QUERY;
+
+			console.log(LINK);
+
+			const req = await fetch(LINK);
+			const response = await req.json();
+
+			console.log(response);
+
+			if (response.reason) {
+				alert(response.reason);
+				setWeatherInformation(BerlinWeather);	
+			} else {
+				setWeatherInformation(response);
+				addPreviousWeatherInformation(response);
+			}
+
+			
+			// addPreviousWeatherInformation(weatherInformation);
+			// setWeatherInformation(BerlinWeather);
 		}
-
-		addPreviousWeatherInformation(weatherInformation);
-
-		setWeatherInformation(BerlinWeather);
 
 		const el = document.getElementById("weather-statistics");
 		if (el) el.style.display = "block";
