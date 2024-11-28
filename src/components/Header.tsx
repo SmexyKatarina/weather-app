@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { WeatherVariables } from "../data/MockData";
 
@@ -7,6 +7,23 @@ import '../css/header.css';
 const Header = (props: { location: { lat: number, long: number }, setLocation: React.Dispatch<React.SetStateAction<{ lat: number, long: number }>>, getWeatherInformation: () => void, addPreviousLocation: (location: { lat: number, long: number }) => void}) => {
 
     const { location, setLocation, getWeatherInformation, addPreviousLocation } = props;
+
+    const [input, setInput] = useState({ lat: "", long: "" });
+
+    // eslint-disable-next-line
+    const coordsPattern = new RegExp("^-?[0-9]*\.?[0-9]*$|^[0-9]+\.?[0-9]*$");
+
+    const changeLocation = (value: { lat: string, long: string }) => {
+        setInput(value);
+        if (coordsPattern.test(input.lat) && coordsPattern.test(input.long)) {
+            setLocation(() => { return { lat: parseFloat(value.lat), long: parseFloat(value.long) } });
+        }
+    }
+
+    const submitLocation = () => {
+        addPreviousLocation({lat: location.lat, long: location.long}); 
+        getWeatherInformation();
+    }
 
     return (
         <div id="header" data-testid="header-component">
@@ -26,10 +43,10 @@ const Header = (props: { location: { lat: number, long: number }, setLocation: R
                 </select>
                 <p>OR</p>
                 <label htmlFor="Latitude" aria-label="Latitude" className="location-label">Latitude</label>
-                <input name="Latitude" className="location-input" id="Latitude"  value={location.lat} onChange={({target}) => setLocation({...location, lat: parseFloat(target.value ? target.value : "0")})}></input>
+                <input name="Latitude" className="location-input" id="Latitude" type="text" value={input.lat} onChange={({target}) => { changeLocation({ lat: target.value, long: input.long }); }}></input>
                 <label htmlFor="Longitude" aria-label="Longitude" className="location-label">Longitude</label>
-                <input name="Longitude" className="location-input" id="Longitude"  value={location.long} onChange={({target}) => setLocation({...location, long: parseFloat(target.value ? target.value : "0")})}></input>
-                <button name="Search" id="get-weather" onClick={() => { addPreviousLocation({lat: location.lat, long: location.long}); getWeatherInformation(); }}>Get My Weather</button>
+                <input name="Longitude" className="location-input" id="Longitude" type="text" value={input.long} onChange={({target}) => { changeLocation({ lat: input.lat, long: target.value}); }}></input>
+                <button name="Search" id="get-weather" onClick={() => { submitLocation(); }}>Get My Weather</button>
                 <button name="Geoloc" id="get-geoloc" onClick={() => { 
                     navigator.geolocation.getCurrentPosition((pos) => {
                         const { latitude, longitude } = pos.coords;
