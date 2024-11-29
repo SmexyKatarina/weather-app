@@ -1,9 +1,8 @@
 .sidelist-container {
     margin: 10px 0 0 15px;
-    padding: 0 15px 15px 0;
+    padding: 5px 0 5px 15px;
     position: fixed;
-    border: dashed gray;
-    border-width: 0 1px 1px 0;
+    border-left: 1px dashed grey;
 }
 
 .sidelist-title {
