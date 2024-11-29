@@ -7,6 +7,8 @@ import SideList from './components/SideList';
 import SideListItem from './components/SideListItem';
 import Footer from "./components/Footer";
 
+import Error from './components/Error';
+
 import WeatherStatistics from './components/WeatherStatistics';
 
 /**
@@ -23,7 +25,7 @@ export const checkBounds = (base: number, lowBounds: number, compare?: number, h
 }
 
 function App() {
-	
+
 	const [location, setLocation] = useState({ lat: 0, long: 0 });
 
 	const [previousLocations, setPreviousLocations] = useState([{ lat: 0, long: 0 }]);
@@ -141,6 +143,8 @@ function App() {
 			]
 		}
 	}]);
+
+	const [error, setError] = useState({ message: "", status: 0 });
 
 	useEffect(() => {
 		setPreviousLocations([]);
@@ -319,20 +323,13 @@ function App() {
 			const req = await fetch(LINK);
 			const response = await req.json();
 
-			// TODO Add custom alert to show additional details of error.
-			// The api has a limit of requests per day so a error to describe that would be best.
-
-			if (response.reason) {
-				alert(response.reason);
-				setWeatherInformation(BerlinWeather);	
+			if (response.error) {
+				setError({ message: response.reason, status: req.status });
+				setWeatherInformation(BerlinWeather);
 			} else {
 				setWeatherInformation(response);
 				addPreviousWeatherInformation(response);
 			}
-
-			
-			// addPreviousWeatherInformation(weatherInformation);
-			// setWeatherInformation(BerlinWeather);
 		}
 
 		const el = document.getElementById("weather-statistics");
@@ -342,17 +339,18 @@ function App() {
 	return (
 		<div className="App">
 			<Header location={location} setLocation={setLocation} getWeatherInformation={getWeatherInformation} addPreviousLocation={addPreviousLocation}/>
-			<div className="sidelists">
-				<SideList name="Previous Locations">
-					{previousLocations.map((x, i) => {
-						return (
-							<SideListItem text={x.lat + ", " + x.long} action={() => {
-								setLocation({lat: x.lat, long: x.long});
-							}} key={i}/>
-						);
-					})}
-				</SideList>
+			<div className="error-placement">
+				{ error.message !== "" ? <Error message={error.message} status={error.status} setError={setError} /> : <></> }
 			</div>
+			<SideList name="Previous Locations">
+				{previousLocations.map((x, i) => {
+					return (
+						<SideListItem text={x.lat + ", " + x.long} action={() => {
+							setLocation({lat: x.lat, long: x.long});
+						}} key={i}/>
+					);
+				})}
+			</SideList>
 			<WeatherStatistics weatherStats={weatherInformation}/>
 			<Footer />
 		</div>
