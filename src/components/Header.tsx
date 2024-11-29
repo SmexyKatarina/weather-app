@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { WeatherVariables } from "../data/MockData";
 
@@ -10,20 +10,36 @@ const Header = (props: { location: { lat: number, long: number }, setLocation: R
 
     const [input, setInput] = useState({ lat: "", long: "" });
 
-    // eslint-disable-next-line
-    const coordsPattern = new RegExp("^-?[0-9]*\.?[0-9]*$|^[0-9]+\.?[0-9]*$");
+    const regex = /^-?\d+\.?\d*$/;
 
     const changeLocation = (value: { lat: string, long: string }) => {
         setInput(value);
-        if (coordsPattern.test(input.lat) && coordsPattern.test(input.long)) {
+        if (regex.test(value.lat) && regex.test(value.long)) {
             setLocation(() => { return { lat: parseFloat(value.lat), long: parseFloat(value.long) } });
         }
     }
 
     const submitLocation = () => {
-        addPreviousLocation({lat: location.lat, long: location.long}); 
+        if (location.lat && location.long) addPreviousLocation({lat: location.lat, long: location.long}); 
         getWeatherInformation();
     }
+
+    const submit = (e: KeyboardEvent) => {
+        if (e.code === "Enter") {
+            let el = document.getElementById("get-weather");
+            if (el) {
+                el.click();
+            }
+        }
+    }
+
+    useEffect(() => {
+        window.addEventListener("keypress", submit);
+
+        return () => {
+            window.removeEventListener("keypress", submit);
+        }
+    });
 
     return (
         <div id="header" data-testid="header-component">
@@ -45,7 +61,7 @@ const Header = (props: { location: { lat: number, long: number }, setLocation: R
                 <label htmlFor="Latitude" aria-label="Latitude" className="location-label">Latitude</label>
                 <input name="Latitude" className="location-input" id="Latitude" type="text" value={input.lat} onChange={({target}) => { changeLocation({ lat: target.value, long: input.long }); }}></input>
                 <label htmlFor="Longitude" aria-label="Longitude" className="location-label">Longitude</label>
-                <input name="Longitude" className="location-input" id="Longitude" type="text" value={input.long} onChange={({target}) => { changeLocation({ lat: input.lat, long: target.value}); }}></input>
+                <input name="Longitude" className="location-input" id="Longitude" type="text" value={input.long} onChange={({target}) => { changeLocation({ lat: input.lat, long: target.value }); }}></input>
                 <button name="Search" id="get-weather" onClick={() => { submitLocation(); }}>Get My Weather</button>
                 <button name="Geoloc" id="get-geoloc" onClick={() => { 
                     navigator.geolocation.getCurrentPosition((pos) => {
