@@ -37,7 +37,7 @@ const Header = (props: { location: { lat: number, long: number }, setLocation: R
                     <option value="_" disabled>Choose destination</option>
                     {WeatherVariables.map((x, i) => {
                         return (
-                            <option key={i} value={`${x.latitude},${x.longitude}`}>{x.latitude}, {x.longitude}</option>
+                            <option key={i} value={`${x.latitude},${x.longitude}`}>{x.name}</option>
                         );
                     })}
                 </select>
