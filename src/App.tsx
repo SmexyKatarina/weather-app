@@ -10,6 +10,7 @@ import Footer from "./components/Footer";
 import Error from './components/Error';
 
 import WeatherStatistics from './components/WeatherStatistics';
+import Loading from './components/Loading';
 
 /**
  * Uses bounds check to ensure that `base` is within a set range.
@@ -25,6 +26,8 @@ export const checkBounds = (base: number, lowBounds: number, compare?: number, h
 }
 
 function App() {
+
+	const [loading, setLoading] = useState(false);
 
 	const [location, setLocation] = useState({ lat: 0, long: 0 });
 
@@ -146,11 +149,18 @@ function App() {
 
 	const [error, setError] = useState({ message: "", status: 0 });
 
+	
 	useEffect(() => {
+		getWeatherInformation({lat: 45.5019, long: -73.5674});
 		setPreviousLocations([]);
 		setPreviousWeatherInformation([]);
+	// eslint-disable-next-line
 	}, []);
 
+	/**
+	 * Adds the previous location to the previous locations list
+	 * @param location The location to add
+	 */
 	const addPreviousLocation = (location: { lat: number, long: number }) => {
 		for (let i = 0; i < previousLocations.length; i++) {
 			if (previousLocations[i].lat === location.lat && previousLocations[i].long === location.long) return;
@@ -163,7 +173,12 @@ function App() {
 		}
 	}
 
-	const addPreviousWeatherInformation = (info: {
+	/**
+	 * Adds the previous weather information if it doesn't exist already.
+	 * @param info The weather information to add
+	 */
+	const addPreviousWeatherInformation = (
+		info: {
 		"latitude": number,
 		"longitude": number,
 		"timezone": string,
@@ -244,10 +259,12 @@ function App() {
 		return false;
 	}
 
-	const getWeatherInformation = async () => {
 
-		// SEND API CALL HERE AND CHANGE METHOD TO ASYNC
-		
+	/**
+	 * Handles the information change with the internal state
+	 * @param _location The optional location to input to force a certain value instead of state value
+	 */
+	const getWeatherInformation = async (_location?: { lat: number, long: number }) => {
 		let check: {
 			"latitude": number,
 			"longitude": number,
@@ -297,8 +314,12 @@ function App() {
 				"sunrise": string[],
 				"sunset": string[]
 			}
-		}|false = containsWeatherInfo(location, 2);
-		const mockCheck = checkMockData({...location});
+		}|false = containsWeatherInfo(_location || location, 2);
+		const mockCheck = checkMockData({...(_location || location)});
+		const el = document.getElementById("weather-statistics");
+		if (!el) return;
+		el.style.display = "none";
+		setLoading(true);
 		if (check) {
 			setWeatherInformation(check);
 			addPreviousWeatherInformation(check);
@@ -310,8 +331,8 @@ function App() {
 			const BASE_URL = "https://api.open-meteo.com/v1/forecast?";
 
 			const QUERY = `
-			latitude=${location.lat}
-			&longitude=${location.long}
+			latitude=${_location ? _location.lat : location.lat}
+			&longitude=${_location ? _location.long : location.long}
 			&current=temperature_2m,apparent_temperature,precipitation,wind_speed_10m
 			&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,cloud_cover,wind_speed_10m
 			&daily=sunrise,sunset
@@ -332,8 +353,9 @@ function App() {
 			}
 		}
 
-		const el = document.getElementById("weather-statistics");
-		if (el) el.style.display = "block";
+		el.style.display = "block";
+
+		setLoading(false);
 	}
 
 	return (
@@ -345,12 +367,14 @@ function App() {
 			<SideList name="Previous Locations">
 				{previousLocations.map((x, i) => {
 					return (
-						<SideListItem text={x.lat + ", " + x.long} action={() => {
-							setLocation({lat: x.lat, long: x.long});
+						<SideListItem text={x.lat.toFixed(2) + ", " + x.long.toFixed(2)} action={() => {
+							setLocation(x);
+							getWeatherInformation(x);
 						}} key={i}/>
 					);
 				})}
 			</SideList>
+			{loading ? <Loading/> : <></>}
 			<WeatherStatistics weatherStats={weatherInformation}/>
 			<Footer />
 		</div>

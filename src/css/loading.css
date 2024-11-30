@@ -1,0 +1,18 @@
+.loading {
+    margin-left: auto;
+    width: 80%;
+    height: 100%;
+    top: 200px;
+    position: relative;
+    font-size: 25px;
+}
+
+#loading-symbol {
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+    100% {
+        transform: rotate(360deg);
+    }
+}
