@@ -4,7 +4,7 @@ import { WeatherVariables } from "../data/MockData";
 
 import '../css/header.css';
 
-const Header = (props: { location: { lat: number, long: number }, setLocation: React.Dispatch<React.SetStateAction<{ lat: number, long: number }>>, getWeatherInformation: () => void, addPreviousLocation: (location: { lat: number, long: number }) => void}) => {
+const Header = (props: { location: { lat: number, long: number }, setLocation: React.Dispatch<React.SetStateAction<{ lat: number, long: number }>>, getWeatherInformation: (_location?: { lat: number, long: number }) => void, addPreviousLocation: (location: { lat: number, long: number }) => void}) => {
 
     const { location, setLocation, getWeatherInformation, addPreviousLocation } = props;
 
@@ -65,9 +65,12 @@ const Header = (props: { location: { lat: number, long: number }, setLocation: R
                 <button name="Search" id="get-weather" onClick={() => { submitLocation(); }}>Get My Weather</button>
                 <button name="Geoloc" id="get-geoloc" onClick={() => { 
                     navigator.geolocation.getCurrentPosition((pos) => {
-                        const { latitude, longitude } = pos.coords;
-                        setLocation({ lat: latitude, long: longitude });
-                    }, () => { alert("Cannot get location."); return;});
+                        const location = { lat: pos.coords.latitude, long: pos.coords.longitude };
+                        setInput({ lat: location.lat.toString(), long: location.long.toString() });
+                        setLocation(location);
+                        addPreviousLocation(location);
+                        getWeatherInformation(location);
+                    }, () => { alert("Cannot get location."); return; });
                  }}>Curr. Loc.</button>
             </div>
         </div>

@@ -53,7 +53,7 @@ const WeatherStatistics = (
                     "sunrise": string[],
                     "sunset": string[]
                 }
-            } 
+            }
         }
     ) => {
 
@@ -124,8 +124,8 @@ const WeatherStatistics = (
     const [currentDay, setCurrentDay] = useState(0);
 
     return (
-        <div id="weather-statistics" style={{ display: "none" }}>
-            <div className="location">Location: {latitude}°{latitude < 0 ? "S" : "N"} {longitude}°{longitude < 0 ? "W" : "E"} with an elevation of {elevation}m {(elevation < 0) ? "below" : "above"} sea level</div>
+        <div id="weather-statistics" /*style={{ display: "none" }}*/>
+            <div className="location">Location: {latitude.toFixed(2)}°{latitude < 0 ? "S" : "N"} {longitude.toFixed(2)}°{longitude < 0 ? "W" : "E"} with an elevation of {elevation}m {(elevation < 0) ? "below" : "above"} sea level</div>
             <div className="timezone">Data generated at: {currentWeather.time.split("T").join(" ") + " " + timezone_abbreviation} ({timezone})</div>
             <div className="current-weather">
                 <div>Current Weather</div>
