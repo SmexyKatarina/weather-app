@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { WeatherVariables } from "../data/MockData";
+import { MockLocations } from "../data/MockData";
 
 import '../css/header.css';
 
@@ -49,19 +49,20 @@ const Header = (props: { location: { lat: number, long: number }, setLocation: R
                 <select name="Location-chooser" id="Location-chooser" onChange={(e) => {
                     const split = e.target.value.split(",").map(x => parseFloat(x));
                     setLocation({lat: split[0], long: split[1]});
+                    setInput({ lat: split[0].toString(), long: split[1].toString() });
                 }} defaultValue={"_"}>
                     <option value="_" disabled>Choose destination</option>
-                    {WeatherVariables.map((x, i) => {
+                    {MockLocations.map((x, i) => {
                         return (
-                            <option key={i} value={`${x.latitude},${x.longitude}`}>{x.name}</option>
+                            <option key={i} value={`${x.lat},${x.long}`}>{x.name}</option>
                         );
                     })}
                 </select>
                 <p>OR</p>
                 <label htmlFor="Latitude" aria-label="Latitude" className="location-label">Latitude</label>
-                <input name="Latitude" className="location-input" id="Latitude" type="text" value={input.lat} onChange={({target}) => { changeLocation({ lat: target.value, long: input.long }); }}></input>
+                <input name="Latitude" placeholder="Ex. 45.5049216" className="location-input" id="Latitude" type="text" value={input.lat} onChange={({target}) => { changeLocation({ lat: target.value, long: input.long }); }}></input>
                 <label htmlFor="Longitude" aria-label="Longitude" className="location-label">Longitude</label>
-                <input name="Longitude" className="location-input" id="Longitude" type="text" value={input.long} onChange={({target}) => { changeLocation({ lat: input.lat, long: target.value }); }}></input>
+                <input name="Longitude" placeholder="Ex. -73.8295808" className="location-input" id="Longitude" type="text" value={input.long} onChange={({target}) => { changeLocation({ lat: input.lat, long: target.value }); }}></input>
                 <button name="Search" id="get-weather" onClick={() => { submitLocation(); }}>Get My Weather</button>
                 <button name="Geoloc" id="get-geoloc" onClick={() => { 
                     navigator.geolocation.getCurrentPosition((pos) => {

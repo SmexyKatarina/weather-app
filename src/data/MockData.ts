@@ -146,18 +146,38 @@ export const BerlinWeather = {
     }
 }
 
+export const MockLocations = [
+    { name: "Quebec City, QC", lat: 46.8131, long: -71.2075 },
+    { name: "Toronto, ON", lat: 43.6532, long: -79.3832 },
+    { name: "Edmonton, AB", lat: 53.5461, long: -113.4937 },
+    { name: "Victoria, BC", lat: 48.4284, long: -123.3656 },
+    { name: "Frederiction, NB", lat: 45.9636, long: -66.6431 },
+    { name: "St.Johns, NL", lat: 47.5556, long: -52.7453 },
+    { name: "Halifax, NS", lat: 44.6509, long: -63.5923 },
+    { name: "Charlottetown, PE", lat: 46.2382, long: -63.1311 },
+    { name: "Regina, SK", lat: 50.4452, long: -104.6189 },
+    { name: "Winnipeg, MB", lat: 49.8954, long: -97.1385 },
+    { name: "Iqaluit, NU", lat: 63.7467, long: -68.5170 },
+    { name: "Yellowknife, NWT", lat: 62.4540, long: -114.3718 },
+    { name: "Whitehorse , YT", lat: 60.7197, long: -135.0523 },
+];
 
-export const WeatherVariables = [BerlinWeather];
+export const MockWeatherVariables = [BerlinWeather];
 
 export const checkMockData = (location: { lat: number, long: number }) => {
-    const locations = WeatherVariables.map((x, i) => { return { lat: x.latitude, long: x.longitude, index: i }});
+    const locations = MockWeatherVariables.map((x, i) => { return { lat: x.latitude, long: x.longitude, index: i }});
 
     for (let i = 0; i < locations.length; i++) {
         const check = locations[i];
+        console.log("Lat Check on Mock");
         const latCheck = checkBounds(location.lat, 2, check.lat);
+        console.log("Long Check on Mock");
         const longCheck = checkBounds(location.long, 2, check.long);
 
+        console.log(latCheck + " - " + longCheck);
+
         if (latCheck && longCheck) {
+            console.log("Going with this mock data");
             return check.index;
         }
     }
