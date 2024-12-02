@@ -2,6 +2,11 @@ import React, { useState } from "react";
 
 import '../css/weatherStats.css';
 
+import cloud_Icon from '../img/weatherSymbols/cloud.svg';
+import precip_Icon from '../img/weatherSymbols/light-rain.svg';
+import wind_Icon from '../img/weatherSymbols/wind.svg';
+import temperature_Icon from '../img/weatherSymbols/thermometer.svg';
+
 const WeatherStatistics = (
         props: { 
             weatherStats: { 
@@ -63,6 +68,15 @@ const WeatherStatistics = (
     const hourlyWeather = { ...hourly, units: { ...hourly_units } };
     const dailyWeather = { ...daily, units: { ...daily_units } };
 
+    const determineColor = (temp: number) => {
+        temp = Math.round(temp);
+        if (temp >= 25) return "red";
+        else if (temp >= 10 && temp < 25) return "orange";
+        else if (temp >= 0 && temp < 10) return "blue";
+        else if (temp >= -20 && temp < 0) return "white";
+        else return "gray";
+    }
+
     const formatTo12Hour = (time: string) => {
         let split = time.split(":").map(x => parseInt(x));
         const afternoon = split[0] >= 12;
@@ -89,12 +103,12 @@ const WeatherStatistics = (
                 cloud_coverage: hourlyWeather.cloud_cover[i],
             };
             hourArray.push((
-                <div className="hour-tile" key={i}>
+                <div className={`hour-tile htcolor-${determineColor(temp)}`} key={i}>
                     <div className="hour-time">{formatTo12Hour(time.split("T")[1])}</div>
-                    <div className="hour-temp">Temp: {Math.round(temp)}{hourlyWeather.units.temperature_2m}<br/>(Feels Like: {Math.round(apparent)}{hourlyWeather.units.temperature_2m})</div>
-                    <div className="hour-wind">Wind Speed:<br/>{Math.round(wind)} {hourlyWeather.units.wind_speed_10m}</div>
-                    <div className="hour-precip">Precip:<br/>{precip_prob}{hourlyWeather.units.precipitation_probability} of {precip}{hourlyWeather.units.precipitation}</div>
-                    <div className="hour-clouds">Cloud Coverage:<br/>{cloud_coverage}{hourlyWeather.units.cloud_cover}</div>
+                    <div className="hour-temp"><img src={temperature_Icon} className="hour-icon" alt="Temperature" /><br/>{Math.round(temp)}{hourlyWeather.units.temperature_2m}<br/>(Feels Like: {Math.round(apparent)}{hourlyWeather.units.temperature_2m})</div>
+                    <div className="hour-wind"><img src={wind_Icon} className="hour-icon" alt="Wind Speed" /> {Math.round(wind)} {hourlyWeather.units.wind_speed_10m}</div>
+                    <div className="hour-precip"><img src={precip_Icon} className="hour-icon" alt="Precipitation Chance"/> {precip_prob}{hourlyWeather.units.precipitation_probability} of {precip}{hourlyWeather.units.precipitation}</div>
+                    <div className="hour-clouds"><img src={cloud_Icon} className="hour-icon" alt="Cloud Coverage"/> <span>{cloud_coverage}{hourlyWeather.units.cloud_cover}</span></div>
                 </div>
             ));
             if (hourArray.length === 8) {

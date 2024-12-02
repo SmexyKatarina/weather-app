@@ -8,7 +8,9 @@
     margin-left: auto;
     width: 80%;
     height: 100%;
-    animation: weather-fadein 2s normal; 
+    position: relative;
+    animation: weather-fadein 1s linear, weather-move 2s linear;
+    border-left: 1px solid rgb(40, 40, 40);
 }
 
 @keyframes weather-fadein {
@@ -17,6 +19,12 @@
     }
     100% {
         opacity: 1;
+    }
+}
+
+@keyframes weather-move {
+    100% {
+        transform: translate(0, 0);
     }
 }
 
@@ -43,8 +51,8 @@
 }
 
 .day-button-active {
-    border: 1px solid rgb(50, 120, 50);
-    color: darkgreen;
+    border: 2px solid rgb(50, 120, 50);
+    color: rgb(92, 179, 92);
     transition: 0.5s all;
 }
 
@@ -57,7 +65,7 @@
 }
 
 .day-button {
-    border: 1px dashed rgb(50, 50, 50);
+    border: 2px dashed rgb(80, 80, 80);
     background-color: transparent;
     color: gray;
     transition: all 0.25s;
@@ -66,10 +74,11 @@
 #day-chooser .day-button:hover {
     cursor: pointer;
     color: white;
+    border-style: solid;
 }
 
 .current-weather {
-    border: 1px solid gray;
+    border: 1px solid lightskyblue;
     width: 30%;
     font-size: 20px;
 }
@@ -88,14 +97,13 @@
 
 #hourly-container {
     display: flex;
-    width: 90%;
+    width: 100%;
     flex-flow: row wrap;
     margin: 0 auto 15px auto;
 }
 
 .hour-tile {
     background-color: transparent;
-    color: gray;
     border: 1px solid gray;
     padding: 10px;
     font-size: 18px;
@@ -105,8 +113,42 @@
     justify-content: space-evenly;
 }
 
-.hour-tile * {
+.hour-tile > * {
     margin-bottom: 10px;
+}
+
+.hour-tile span {
+    text-align: center;
+}
+
+.hour-icon {
+    width: 30px;
+    height: 30px;   
+}
+
+.htcolor-red {
+    color: red;
+    border-color: red;
+}
+
+.htcolor-orange {
+    color: orange;
+    border-color: orange;
+}
+
+.htcolor-blue {
+    color: lightsteelblue;
+    border-color: lightsteelblue;
+}
+
+.htcolor-white {
+    color: white;
+    border-color: white;
+}
+
+.htcolor-gray {
+    color: gray;
+    border-color: gray;
 }
 
 .daily-weather {
@@ -127,6 +169,6 @@
 }
 
 .separator {
-    border-top: 1.5px solid gray;
+    border-top: 1.5px solid whitesmoke;
     width: 80%;
 }
