@@ -9,7 +9,8 @@
     width: 80%;
     height: 100%;
     position: relative;
-    animation: weather-fadein 1s linear, weather-move 2s linear;
+    top: 100px;
+    animation: weather-fadein 1s linear, weather-move 1s linear forwards;
     border-left: 1px solid rgb(40, 40, 40);
 }
 
@@ -24,7 +25,7 @@
 
 @keyframes weather-move {
     100% {
-        transform: translate(0, 0);
+        top: 0;
     }
 }
 
@@ -60,8 +61,7 @@
     margin: 5px;
     padding: 5px;
     background-color: transparent;
-    font-size: 16px;
-    
+    font-size: 18px;
 }
 
 .day-button {
@@ -114,7 +114,10 @@
 }
 
 .hour-tile > * {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .hour-tile span {
@@ -123,7 +126,7 @@
 
 .hour-icon {
     width: 30px;
-    height: 30px;   
+    height: 30px;  
 }
 
 .htcolor-red {

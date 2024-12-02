@@ -105,10 +105,10 @@ const WeatherStatistics = (
             hourArray.push((
                 <div className={`hour-tile htcolor-${determineColor(temp)}`} key={i}>
                     <div className="hour-time">{formatTo12Hour(time.split("T")[1])}</div>
-                    <div className="hour-temp"><img src={temperature_Icon} className="hour-icon" alt="Temperature" /><br/>{Math.round(temp)}{hourlyWeather.units.temperature_2m}<br/>(Feels Like: {Math.round(apparent)}{hourlyWeather.units.temperature_2m})</div>
-                    <div className="hour-wind"><img src={wind_Icon} className="hour-icon" alt="Wind Speed" /> {Math.round(wind)} {hourlyWeather.units.wind_speed_10m}</div>
-                    <div className="hour-precip"><img src={precip_Icon} className="hour-icon" alt="Precipitation Chance"/> {precip_prob}{hourlyWeather.units.precipitation_probability} of {precip}{hourlyWeather.units.precipitation}</div>
-                    <div className="hour-clouds"><img src={cloud_Icon} className="hour-icon" alt="Cloud Coverage"/> <span>{cloud_coverage}{hourlyWeather.units.cloud_cover}</span></div>
+                    <div className="hour-temp"><img src={temperature_Icon} className="hour-icon" alt="Temperature" /><span>{Math.round(temp)}{hourlyWeather.units.temperature_2m}<br/>(Feels Like: {Math.round(apparent)}{hourlyWeather.units.temperature_2m})</span></div>
+                    <div className="hour-wind"><img src={wind_Icon} className="hour-icon" alt="Wind Speed" /><span>{Math.round(wind)} {hourlyWeather.units.wind_speed_10m}</span></div>
+                    <div className="hour-precip"><img src={precip_Icon} className="hour-icon" alt="Precipitation Chance" /><span>{precip_prob}{hourlyWeather.units.precipitation_probability} of {precip}{hourlyWeather.units.precipitation}</span></div>
+                    <div className="hour-clouds"><img src={cloud_Icon} className="hour-icon" alt="Cloud Coverage"/><span>{cloud_coverage}{hourlyWeather.units.cloud_cover}</span></div>
                 </div>
             ));
             if (hourArray.length === 8) {
