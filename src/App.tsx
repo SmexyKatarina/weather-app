@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
-import { BerlinWeather, checkMockData, MockWeatherVariables } from './data/MockData';
+import { MockWeatherVariables } from './data/MockData';
 import Header from "./components/Header";
 import SideList from './components/SideList';
 import SideListItem from './components/SideListItem';
@@ -22,8 +22,6 @@ import Loading from './components/Loading';
  */
 export const checkBounds = (base: number, lowBounds: number, compare?: number, highBounds?: number) => {
 	if (!highBounds) highBounds = lowBounds; if (!compare) compare = base;
-	console.log(Math.floor(compare - lowBounds) + " <= " + Math.floor(base) + " && " + Math.floor(base) + " <= " + Math.floor(compare + highBounds));
-	console.log(Math.floor(compare - lowBounds) <= Math.floor(base) && Math.floor(base) <= Math.floor(compare + highBounds));
 	return (Math.floor(compare - lowBounds) <= Math.floor(base) && Math.floor(base) <= Math.floor(compare + highBounds));
 }
 
@@ -261,6 +259,8 @@ function App() {
 		return false;
 	}
 
+	
+
 	const fetchData = async (_location?: { lat: number, long: number }) => {
 		const BASE_URL = "https://api.open-meteo.com/v1/forecast?";
 
@@ -280,7 +280,7 @@ function App() {
 
 		if (response.error) {
 			setError({ message: response.reason, status: req.status });
-			setWeatherInformation(BerlinWeather);
+			setWeatherInformation(MockWeatherVariables[Math.floor(Math.random() * MockWeatherVariables.length)]);
 		} else {
 			setWeatherInformation(response);
 			addPreviousWeatherInformation(response);
@@ -344,7 +344,6 @@ function App() {
 			}
 		}|false 
 		= containsWeatherInfo(_location || location, 2);
-		const mockCheck = checkMockData(_location || location);
 		const el = document.getElementById("weather-statistics");
 		if (!el) return;
 		el.style.display = "none";
@@ -352,10 +351,6 @@ function App() {
 		if (check && !forceGetData) {
 			setWeatherInformation(check);
 			addPreviousWeatherInformation(check);
-		} else if (mockCheck !== -1 && !forceGetData) {
-			const info = MockWeatherVariables[mockCheck];
-			setWeatherInformation(info);
-			addPreviousWeatherInformation(info);
 		} else {
 			await fetchData(_location);
 		}
@@ -385,5 +380,7 @@ function App() {
 		</div>
 	);
 }
+
+
 
 export default App;
