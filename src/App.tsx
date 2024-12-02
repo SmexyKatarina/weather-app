@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
-import { BerlinWeather, checkMockData, WeatherVariables } from './data/MockData';
+import { BerlinWeather, checkMockData, MockWeatherVariables } from './data/MockData';
 import Header from "./components/Header";
 import SideList from './components/SideList';
 import SideListItem from './components/SideListItem';
@@ -22,6 +22,8 @@ import Loading from './components/Loading';
  */
 export const checkBounds = (base: number, lowBounds: number, compare?: number, highBounds?: number) => {
 	if (!highBounds) highBounds = lowBounds; if (!compare) compare = base;
+	console.log(Math.floor(compare - lowBounds) + " <= " + Math.floor(base) + " && " + Math.floor(base) + " <= " + Math.floor(compare + highBounds));
+	console.log(Math.floor(compare - lowBounds) <= Math.floor(base) && Math.floor(base) <= Math.floor(compare + highBounds));
 	return (Math.floor(compare - lowBounds) <= Math.floor(base) && Math.floor(base) <= Math.floor(compare + highBounds));
 }
 
@@ -151,9 +153,9 @@ function App() {
 
 	
 	useEffect(() => {
-		getWeatherInformation({lat: 45.5019, long: -73.5674});
 		setPreviousLocations([]);
 		setPreviousWeatherInformation([]);
+		getWeatherInformation({ lat: 45.5049216, long: -73.8295808 }, true);	
 	// eslint-disable-next-line
 	}, []);
 
@@ -241,17 +243,17 @@ function App() {
 
 	/**
 	 * A method to check the previously gathered weather information to see if something is within range.
-	 * @param {object} location The location to check inside of the method.
-	 * @param {number} range The range around the previous lat and long coordinates to check for.
-	 * @returns {({}|false)} The desired information being checked or false if none was found.
+	 * @param location The location to check inside of the method.
+	 * @param range The range around the previous lat and long coordinates to check for.
+	 * @returns The desired information being checked or false if none was found.
 	 */
 	const containsWeatherInfo = (location: { lat: number, long: number }, range: number) => {
 		const locations = previousWeatherInformation.map((x, i) => { return { lat: Math.floor(x.latitude), long: Math.floor(x.longitude), index: i }; });
 
 		for (let i = 0; i < locations.length; i++) {
 			const check = locations[i];
-			const latBounds = checkBounds(location.lat, check.lat, 2);
-			const longBounds = checkBounds(location.long, check.long, 2);
+			const latBounds = checkBounds(location.lat, range, check.lat);
+			const longBounds = checkBounds(location.long, range, check.long);
 			if (latBounds && longBounds) {
 				return previousWeatherInformation[check.index];
 			}
@@ -259,12 +261,38 @@ function App() {
 		return false;
 	}
 
+	const fetchData = async (_location?: { lat: number, long: number }) => {
+		const BASE_URL = "https://api.open-meteo.com/v1/forecast?";
+
+		const QUERY = `
+		latitude=${_location ? _location.lat : location.lat}
+		&longitude=${_location ? _location.long : location.long}
+		&current=temperature_2m,apparent_temperature,precipitation,wind_speed_10m
+		&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,cloud_cover,wind_speed_10m
+		&daily=sunrise,sunset
+		&timezone=auto
+		&temporal_resolution=hourly_3`;
+
+		const LINK = BASE_URL + QUERY;
+
+		const req = await fetch(LINK);
+		const response = await req.json();
+
+		if (response.error) {
+			setError({ message: response.reason, status: req.status });
+			setWeatherInformation(BerlinWeather);
+		} else {
+			setWeatherInformation(response);
+			addPreviousWeatherInformation(response);
+		}
+	}
+
 
 	/**
 	 * Handles the information change with the internal state
 	 * @param _location The optional location to input to force a certain value instead of state value
 	 */
-	const getWeatherInformation = async (_location?: { lat: number, long: number }) => {
+	const getWeatherInformation = async (_location?: { lat: number, long: number }, forceGetData?: boolean) => {
 		let check: {
 			"latitude": number,
 			"longitude": number,
@@ -314,47 +342,24 @@ function App() {
 				"sunrise": string[],
 				"sunset": string[]
 			}
-		}|false = containsWeatherInfo(_location || location, 2);
-		const mockCheck = checkMockData({...(_location || location)});
+		}|false 
+		= containsWeatherInfo(_location || location, 2);
+		const mockCheck = checkMockData(_location || location);
 		const el = document.getElementById("weather-statistics");
 		if (!el) return;
 		el.style.display = "none";
 		setLoading(true);
-		if (check) {
+		if (check && !forceGetData) {
 			setWeatherInformation(check);
 			addPreviousWeatherInformation(check);
-		} else if (mockCheck !== -1) {
-			const info = WeatherVariables[mockCheck];
+		} else if (mockCheck !== -1 && !forceGetData) {
+			const info = MockWeatherVariables[mockCheck];
 			setWeatherInformation(info);
 			addPreviousWeatherInformation(info);
 		} else {
-			const BASE_URL = "https://api.open-meteo.com/v1/forecast?";
-
-			const QUERY = `
-			latitude=${_location ? _location.lat : location.lat}
-			&longitude=${_location ? _location.long : location.long}
-			&current=temperature_2m,apparent_temperature,precipitation,wind_speed_10m
-			&hourly=temperature_2m,apparent_temperature,precipitation_probability,precipitation,cloud_cover,wind_speed_10m
-			&daily=sunrise,sunset
-			&timezone=auto
-			&temporal_resolution=hourly_3`;
-
-			const LINK = BASE_URL + QUERY;
-
-			const req = await fetch(LINK);
-			const response = await req.json();
-
-			if (response.error) {
-				setError({ message: response.reason, status: req.status });
-				setWeatherInformation(BerlinWeather);
-			} else {
-				setWeatherInformation(response);
-				addPreviousWeatherInformation(response);
-			}
+			await fetchData(_location);
 		}
-
 		el.style.display = "block";
-
 		setLoading(false);
 	}
 
